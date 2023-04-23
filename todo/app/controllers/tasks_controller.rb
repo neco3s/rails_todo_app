@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  before_action :set_task, only: [:edit,:update,:destroy,:toggle]
+
   def index
     @tasks = Task.all
   end
@@ -19,11 +21,9 @@ class TasksController < ApplicationController
 
   def edit
     # p params[:id]
-    @task = Task.find(params[:id])
   end
 
   def update
-    @task = Task.find(params[:id])
     if @task.update(task_params)
       redirect_to root_path
     else
@@ -32,13 +32,11 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @task = Task.find(params[:id])
     @task.destroy
     redirect_to root_path, status: :see_other
   end
 
   def toggle
-    @task = Task.find(params[:id])
     @task.update(completed: !@task.completed)
     render turbo_stream: turbo_stream.replace(
       @task,
@@ -52,4 +50,7 @@ class TasksController < ApplicationController
     params.require(:task).permit(:title)
   end
 
+  def set_task
+    @task = Task.find(params[:id])
+  end
 end
