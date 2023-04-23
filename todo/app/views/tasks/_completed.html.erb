@@ -1,0 +1,12 @@
+<%= turbo_frame_tag task do%>
+  <%= form_with model: task, url: toggle_task_path(task) do |f| %>
+  <li>
+  <span class="<%= task.completed? ? 'completed' : '' %>">
+    <%= f.check_box :completed, onchange: 'this.form.requestSubmit()' %>
+    <%= task.title %>
+    <%= link_to '[編集]',edit_task_path(task),data: {turbo_frame: '_top' } %>
+    <%= link_to '[削除]', task_path(task), data: {turbo_method: 'delete', turbo_confirm: '消していいの？'} %>
+  </span>
+  </li>
+  <% end %>
+<% end %>
